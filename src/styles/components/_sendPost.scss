@@ -1,0 +1,61 @@
+.post{
+  width: 100%;
+  box-shadow:  2px 2px 2px 2px #12121233;
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  padding-top: 5px;
+  form{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    textarea{
+      position: relative;
+      height: 60px;
+      width: 100%;
+      border: none;
+      box-shadow: 0.5px 0.5px #12121233;
+      resize: none;
+      &:focus{
+        border: 1px solid #12121233;
+        outline: none;
+      }
+      &::placeholder{
+        position: absolute;
+        margin-left: 5px;
+      }
+    }
+    label[for='file']{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }    
+    .icons{
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 5px;
+    }
+    input[type='file']{
+      display: none;
+    }
+    .button{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      button{
+        width: 60px;
+        padding: 4px;
+        
+      }
+      .blue{
+        background-color: blue;
+        color: white;
+        border: none;
+        border-radius: 3px;
+      }
+    }
+  }
+}

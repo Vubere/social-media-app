@@ -1,0 +1,54 @@
+@use "./pages/loginSignup";
+@use "./pages/editPage";
+@use "./components/header";
+@use "./components/userHint";
+@use "./components/feedComponent";
+@use "./components/sendPost";
+@use "./pages/chatPage";
+@use "./pages/profile";
+@use "./pages/dashboard";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+::-webkit-scrollbar {
+  width: 0;
+}
+body {
+  background-color: f1f1f1;
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  overflow-x: hidden;
+  height: 100vh;
+  max-width: 100vw;
+}
+button {
+  cursor: pointer;
+  &:active {
+    scale: 1.05 1.05;
+  }
+}
+a {
+  text-decoration: none;
+}
+header{
+  font-size: 20px;
+  border-bottom: 3px solid #fff9;
+  width: 100%;
+  margin: 0;
+  text-align: left;
+}
+.outlet{
+  width: 80%;
+  border-right: 2px solid #22222261;
+  position: absolute;
+  height: 100vh;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  left: 40px;
+}
+ 

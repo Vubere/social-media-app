@@ -1,0 +1,11 @@
+export const login = '/login'
+export const signup = '/signup'
+export const dashboard = '/home'
+export const profile = '/profile'
+export const mutuals = 'connections'
+export const editProfile = 'edit_profile'
+export const notifications = '/notifications'
+export const messages = '/messages'
+export const chats = '/chat'
+export const settings = '/settings'
+
