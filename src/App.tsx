@@ -22,16 +22,22 @@ function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    if(currentUser!=null){
+      navigate('/home')
+    }else{
+      navigate('/login')
+    }
     onAuthStateChanged(auth, async (user) => {
       if (user != null) {
         localStorage.setItem('currentuser', JSON.stringify(user))
         const userDetails = await getUserById(user.uid)
         dispatch(updateUser(userDetails))
-        console.log('signedin')
+        navigate('/home')
       } else {
         navigate(routes.login)
         localStorage.removeItem('currentuser')
         dispatch(removeUser(''))
+        navigate('/login')
         console.log('signedout')
       }
     })()
