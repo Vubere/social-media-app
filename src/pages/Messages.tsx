@@ -35,15 +35,19 @@ export default function Messages() {
   return (
     <section className="messages">
       <header>
-        <h3>Messages</h3>
+        <h2>Messages</h2>
       </header>
-      <h4>Chats</h4>
-      {chats.length > 0 ? (
-        chats.sort((a, b) => b.time - a.time).map((details) =>
-          <ChatSnippet key={details.time} details={details} />
-        )
-      )
-        : <>you have no open chats...</>}
+      <section className="chats">
+        <h3>Chats</h3>
+        <div className="bubbles">
+          {chats.length > 0 ? (
+            chats.sort((a, b) => b.time - a.time).map((details) =>
+              <ChatSnippet key={details.time} details={details} />
+            )
+          )
+            : <>you have no open chats...</>}
+        </div>
+      </section>
       <h4>You can chat with...</h4>
       {notChatted.length > 0 ? (
         <section className="toChat">
