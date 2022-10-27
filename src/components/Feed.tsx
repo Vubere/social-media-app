@@ -16,7 +16,7 @@ export default function Feed() {
 
 
   const dispatch = useAppDispatch()
-  const {feed} = useAppSelector<{feed:PostDetails[]|[]}>(state => state.feed)
+  const {feed}:{feed:PostDetails[]|[]} = useAppSelector<{feed:PostDetails[]|[]}>(state => state.feed)
 
 
   useEffect(() => {
