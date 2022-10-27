@@ -13,10 +13,10 @@ import { setFeed } from '../slices/feedSlice'
 
 export default function Feed() {
   const { currentUser } = getAuth()
-  
+
 
   const dispatch = useAppDispatch()
-  const {feed} = useAppSelector(state => state.feed)
+  const {feed} = useAppSelector<{feed:PostDetails[]|[]}>(state => state.feed)
 
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function Feed() {
     {feed.length != 0 ?
       <section className='feed'>
         {
-        feed.map((item) => {
+        feed.map((item:PostDetails) => {
             return (<PostItem key={item.date} details={item} />)
           }
           )
