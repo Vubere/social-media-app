@@ -5,7 +5,7 @@ import Suggestion from '../components/Suggestions'
 
 
 export default function Dashboard() {
-
+  
   return (
 
     <div className="dashboard">

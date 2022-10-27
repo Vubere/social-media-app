@@ -24,7 +24,7 @@ export default function ChatBody({user, receiver}:{user:currentUser, receiver:cu
       {chatArray.length?chatArray.map((chat:any)=>
       <>
           <Chatbubble message={chat.message} time={chat.time} document={chat.document} person={chat.sender===user.userID?user:receiver}
-            className={chat.sender === user.userID ? 'right': 'left'}/>
+            className={chat.sender === user.userID ? 'right chatbubble': 'left chatbubble'}/>
       </>
       ):<p>
         start a chat...

@@ -33,17 +33,17 @@ export default function Header() {
           <nav>
             <h1>
               <Link to={routes.dashboard}>
-                <img src={home} alt="" className='homeImg' width='80%' />
+                <img src={home} alt="" className='' width='80%' />
               </Link>
             </h1>
             <Link to={routes.notifications} title='notifications' className='Link'>
-                <img src={notification} alt="" className='homeImg' width='80%' />
+                <img src={notification} alt="" className='' width='80%' />
             </Link>
             <Link to={routes.messages} title='messages' className='Link'>
-                <img src={messageIcon} alt="" className='homeImg' width='80%' />
+                <img src={messageIcon} alt="" className='' width='80%' />
             </Link>
             <Link to={routes.settings} title='settings' className='Link'>
-                <img src={settingIcon} alt="" className='homeImg' width='80%' />
+                <img src={settingIcon} alt="" className='' width='80%' />
               
             </Link>
             <Link to={routes.login} title='sign out' className='Link' onClick={async () => await signout()}>

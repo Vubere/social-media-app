@@ -1,49 +1,61 @@
 import { useEffect, useState } from 'react'
 import { getAuth } from 'firebase/auth'
-import {  doc, onSnapshot} from 'firebase/firestore'
+import { doc, onSnapshot } from 'firebase/firestore'
 import { db } from '../main'
-import { useAppSelector } from '../app/hooks'
+import { useAppDispatch, useAppSelector } from '../app/hooks'
 import PostItem from './FeedComponents/PostItem'
 
 import { PostDetails } from './FeedComponents/PostItem'
 import { getUserById } from '../helpers/helpers'
 
+import Loading from './loading'
+import { setFeed } from '../slices/feedSlice'
+
 export default function Feed() {
-  const {currentUser} = getAuth()
-  const [posts, setPost] = useState<PostDetails[]>([])
+  const { currentUser } = getAuth()
+  
+
+  const dispatch = useAppDispatch()
+  const {feed} = useAppSelector(state => state.feed)
+
 
   useEffect(() => {
-    if (currentUser != null&&posts.length==0) {
-      (async() => {
+    if (currentUser != null && feed.length == 0) {
+      (async () => {
+        let temp: any = []
         const user = await getUserById(currentUser.uid)
         const mapArr = [currentUser.uid, ...user.following]
-        let temp:any = []
-        mapArr.forEach((v)=>{
+        mapArr.forEach((v, j) => {
           const docRef = doc(db, 'post', v)
-          onSnapshot(docRef, (doc)=>{
+          onSnapshot(docRef, (doc) => {
             let data = doc.data()
-            if(data!=undefined){
-              for(let i in data){
-                if(typeof data[i]!='number')
-                temp.push(data[i])
+
+            if (data != undefined) {
+              let arr = Object.values(data)
+              for (let i in arr) {
+                if (typeof arr[i] != 'number')
+                  temp.push(arr[i])
+                if (Number(j) == mapArr.length - 1) {
+                  dispatch(setFeed(temp))
+                }
               }
             }
           })
         })
-        setPost(temp)
       })()
     }
   }, [currentUser])
   return (<>
-    {posts.length != 0 ?
+    {feed.length != 0 ?
       <section className='feed'>
-        <h2>feed</h2>
         {
-          posts.sort((a,b)=>b.date-a.date).map((item) => (<PostItem key={item.date} details={item}/>)
+        feed.map((item) => {
+            return (<PostItem key={item.date} details={item} />)
+          }
           )
         }
       </section>
-      : <p>follow people to see post...</p>}
+      : <Loading />}
   </>)
 }
 

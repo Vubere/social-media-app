@@ -1,5 +1,6 @@
 import { currentUser } from "../profileComponents/Header";
 import defaultAvatar from '../../assets/defaultAvatar.jpg'
+import backArrow from '../../assets/backArrow.svg'
 
 export default function ChatHeader({ receiver }: { receiver: currentUser }) {
   return (
@@ -15,7 +16,7 @@ export default function ChatHeader({ receiver }: { receiver: currentUser }) {
         </span>
       </section>
       <span className="back">
-        {'\<'}
+        <img src={backArrow} alt="" height="25px" width="40px"/>
       </span>
     </section>
   )
