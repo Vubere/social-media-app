@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { getAuth } from 'firebase/auth'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, onSnapshot } from 'firebase/firestore'
 import {useState, useEffect} from 'react'
 import { getUserById } from '../helpers/helpers'
 import { db } from '../main'
@@ -8,25 +8,29 @@ import { db } from '../main'
 
 export default function NotificationsList(){
   const [notifications, setNotifications] = useState<notification[]>()
+  const [unread, setUnread] = useState(0)
   const {currentUser} = getAuth()
   
   useEffect(()=>{
+    let unsub:any = () => {}
     (async()=>{
       if(currentUser!=null){
         const docRef = doc(db, 'notifications', currentUser.uid)
-        const res = await getDoc(docRef)
-        if(res.exists()){
-          let arr = [], data = res.data()
-          const sender = await getUserById(data.sender)
-          for(let i in data){
-            if(typeof data[i]!= 'number'){
-              arr.push(data[i])
+        unsub = onSnapshot(docRef,async(res)=>{
+          const data = res.data()
+          if(data!=undefined){
+            let temp = []
+            for(let i in data){
+              if(typeof data[i]!='number'){
+                temp.push(data[i])
+              }
             }
+            setNotifications(temp)
           }
-          setNotifications(arr)
-        }
+        })
       }
     })()
+    return unsub
   },[currentUser])
   return (
     <>

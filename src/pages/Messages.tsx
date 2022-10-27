@@ -27,6 +27,7 @@ export default function Messages() {
           }
         })
       }
+      return [unsub]
     })()
     return unsub
   }, [currentUser])

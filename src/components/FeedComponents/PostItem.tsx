@@ -26,7 +26,7 @@ export default function PostItem({ details }: { details: PostDetails }) {
 
       }
     })()
-  }, [])
+  }, [details])
 
   return postOwner !== undefined ? (
     <article className="postItem">

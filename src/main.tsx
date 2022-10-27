@@ -52,9 +52,9 @@ const Notifications = lazy(() => import('./pages/NotificationList'))
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Provider store={store}>
     <React.StrictMode>
-      <ErrorBoundary>
 
-        <Suspense fallback={<div>loading...</div>}>
+      <Suspense fallback={<div>loading...</div>}>
+        <ErrorBoundary>
           <BrowserRouter>
             <Routes>
               <Route path='/' element={<App />}>
@@ -64,7 +64,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <Route path={routes.messages} element={<Messages />} />
                 <Route path={routes.notifications} element={<Notifications />} />
                 <Route path={`${routes.chats}/:username`} element={<Chat />} />
-                <Route path={`${routes.profile}/:uid`} element={<Profile />}>
+                <Route path={`${routes.profile}/:username`} element={<Profile />}>
                   <Route index element={<Main />} />
                   <Route path={routes.editProfile} element={<EditProfile />} />
                   <Route path={routes.mutuals} element={<FollowPage />} />
@@ -73,8 +73,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               </Route>
             </Routes>
           </BrowserRouter>
-        </Suspense>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </Suspense>
     </React.StrictMode>
   </Provider>
 )

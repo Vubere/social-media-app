@@ -1,7 +1,7 @@
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { getAuth } from 'firebase/auth'
 import { useState } from 'react'
-import { setDoc, doc } from 'firebase/firestore'
+import { setDoc, doc, increment } from 'firebase/firestore'
 import { db } from '../main'
 
 import Camera from "../assets/camera.svg"
@@ -36,7 +36,8 @@ export default function SendPost() {
             likes: [],
             date: date,
             sender: currentUser.uid
-          }
+          },
+          postLength: increment(1)
         }, { merge: true })
         setPost('')
 

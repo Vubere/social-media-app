@@ -23,7 +23,6 @@ export default function UserHint({user}:{user:currentUser}){
       setFollowing,
       following
     )
-
   }
   useEffect(()=>{
     if(userDetails){

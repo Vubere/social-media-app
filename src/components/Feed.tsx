@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getAuth } from 'firebase/auth'
-import { doc, getDoc} from 'firebase/firestore'
+import {  doc, onSnapshot} from 'firebase/firestore'
 import { db } from '../main'
 import { useAppSelector } from '../app/hooks'
 import PostItem from './FeedComponents/PostItem'
@@ -17,20 +17,20 @@ export default function Feed() {
       (async() => {
         const user = await getUserById(currentUser.uid)
         const mapArr = [currentUser.uid, ...user.following]
-        const dataArr: any[] = []
-        mapArr.map(async (uid) => {
-          const docRef = doc(db, 'post', uid)
-          const res = await getDoc(docRef)
-          if (res.exists()) {
-            const arr = Object.values(res.data())
-            if (arr.length) {
-              arr.map((data) => {
-                dataArr.push(data)
-              })
+        let temp:any = []
+        mapArr.forEach((v)=>{
+          const docRef = doc(db, 'post', v)
+          onSnapshot(docRef, (doc)=>{
+            let data = doc.data()
+            if(data!=undefined){
+              for(let i in data){
+                if(typeof data[i]!='number')
+                temp.push(data[i])
+              }
             }
-          }
+          })
         })
-        setPost(posts.concat(dataArr))
+        setPost(temp)
       })()
     }
   }, [currentUser])

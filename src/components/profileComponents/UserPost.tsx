@@ -3,9 +3,13 @@ import { getDoc, doc } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { db } from '../../main'
 import { currentUser } from './Header'
+import PostItem from '../FeedComponents/PostItem'
+
+
+import { PostDetails } from '../FeedComponents/PostItem'
 
 export default function Feed({user}:{user:currentUser}) {
-  const [postList, setPostList] = useState<postLis|[]>([])
+  const [postList, setPostList] = useState<PostDetails[]|[]>([])
 
   useEffect(() => {
     (async () => {
@@ -20,29 +24,14 @@ export default function Feed({user}:{user:currentUser}) {
         setPostList(arr)
 
     })()
-  }, [])
+  }, [user])
   return (
     <div className="userUploads">
       {postList.length? <>
         {postList.map((data)=>
-          <div key={data.caption} className='postItem'>
-            {
-              data.imagePath.length!==0&&
-            <img src={data.imagePath} alt={data.caption} className='post img'/>
-            }
-            <p className="caption">
-              {data.caption}
-            </p>
-          </div>)
+          <PostItem details={data}/>)
         }
       </> : <div className='userPost'>no post available</div>}
     </div>
   )
 }
-type postLis = {
-  comments: any[],
-  caption:"hello",
-  date:number,
-  imagePath:string,
-  likes:any[]
-}[]

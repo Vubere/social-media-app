@@ -9,8 +9,8 @@ import { currentUser } from '../components/profileComponents/Header'
 export const profileContext = createContext<currentUser | undefined>(undefined)
 
 export default function Profile() {
-  const { uid } = useParams()
-  const [userInfo] = useUserDetails(uid as string)
+  const { username } = useParams()
+  const [userInfo] = useUserDetails(username as string)
 
 
   return (

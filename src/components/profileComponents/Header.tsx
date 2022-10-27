@@ -44,7 +44,7 @@ export default function Header({ user }: { user: currentUser }) {
         if (user.followers.includes(userDetails.userID))
           setFollowing(true)
     }
-  }, [userDetails])
+  }, [user])
 
 
   return (
