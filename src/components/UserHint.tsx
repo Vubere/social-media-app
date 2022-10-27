@@ -2,7 +2,6 @@ import { doc, setDoc, collection, arrayUnion } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import {useState, useEffect} from 'react' 
 import {Link} from 'react-router-dom'
-import { db } from '../main'
 import { currentUser } from "./profileComponents/Header"
 
 import { sendNotification, toggleFollowAUser } from '../helpers/helpers'

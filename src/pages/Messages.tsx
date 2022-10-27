@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth"
-import { doc, getDoc, onSnapshot } from "firebase/firestore"
+import { doc, onSnapshot } from "firebase/firestore"
 import { useState, useEffect } from "react"
 import ChatSnippet from "../components/messagesComponents/ChatSnippet"
 import { db } from "../main"

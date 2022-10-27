@@ -1,5 +1,5 @@
-import { getAuth } from 'firebase/auth'
-import { collection, getDoc, doc } from 'firebase/firestore'
+
+import { getDoc, doc } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { db } from '../../main'
 import { currentUser } from './Header'
