@@ -12,7 +12,7 @@ import { useAppSelector } from '../app/hooks'
 
 export default function ChatPage(){
   const [user, setUser] = useState<currentUser>()
-  const {receiver} = useAppSelector(state=>state.chat)
+  const {receiver} = useAppSelector<{receiver:currentUser|undefined}>(state=>state.chat)
   const {currentUser} = getAuth()
   
   useEffect(()=>{

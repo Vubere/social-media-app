@@ -9,7 +9,7 @@ import UserHint from './UserHint'
 
 
 export default function Suggestion() {
-  const {user} = useAppSelector(state=>state.user)
+  const {user} = useAppSelector<{user:currentUser|null}>(state=>state.user)
   const [currentUser] = useUserDetails(user?.username as string)
   const [suggestions, setSuggestions] = useState<currentUser[]>([])
   
