@@ -1,18 +1,53 @@
 
 import { useEffect, useState } from "react";
 
+import { formatRelative, subDays } from "date-fns";
+
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { db } from "../../main";
+
+import Form from "./CommentForm";
+import CommentHint from "./CommentHint";
+
 import { getUserById } from "../../helpers/helpers";
+
 import { currentUser } from "../profileComponents/Header";
+
 import defaultAvatar from "../../assets/defaultAvatar.jpg"
 import noLike from "../../assets/noLike.svg"
 import liked from '../../assets/liked.png'
 import comment from '../../assets/addComment.svg'
 
+
 export default function PostItem({ details }: { details: PostDetails }) {
-  const { user, caption, comments, date, imagePath, likes } = details
+  const [likeArr, setLikes] = useState(details.likes)
+
+  const { user, caption, comments, date, imagePath } = details
   const [postOwner, setPostOwner] = useState<currentUser | undefined>()
   const { currentUser } = getAuth()
+
+  const handleLike = async () => {
+    if (currentUser != null) {
+      const docRef = doc(db, 'post', details.user)
+      if (likeArr.includes(currentUser.uid)) {
+        await updateDoc(docRef, {
+          [`${date}.likes`]: arrayRemove(currentUser.uid)
+        })
+        const h = await getDoc(docRef)
+        let l = h.data()
+        if (l != undefined) {
+          const f = l[date].likes
+          setLikes(f)
+        }
+      } else {
+        setLikes(likeArr.concat([currentUser.uid]))
+        await updateDoc(docRef, {
+          [`${date}.likes`]: arrayUnion(currentUser.uid)
+        })
+      }
+    }
+  }
 
 
   useEffect(() => {
@@ -43,25 +78,26 @@ export default function PostItem({ details }: { details: PostDetails }) {
           </section>
           <div className="options">...</div>
         </header>
+        <p className="text">
+          {caption}
+        </p>
         {imagePath !== '' &&
           <div className="img">
             <img src={imagePath} alt="post Image" width='80%' />
           </div>
         }
-        <p className="text">
-          {caption}
-        </p>
         <div className="reactions">
-          <span className="like">
-        
-              <img src={currentUser != undefined ? likes.includes(currentUser.uid) ? liked : noLike : noLike} alt="like" />
-          
-            <p>{likes.length > 0 ? likes.length : ''}</p>
+          <span className="like" >
+
+            <img src={currentUser != undefined ? likeArr.includes(currentUser.uid) ? liked : noLike : noLike} alt="like"
+              onClick={handleLike} />
+
+            <p>{likeArr.length > 0 ? likeArr.length : ''}</p>
           </span>
           <span className="comment">
-          
-              <img src={comment} alt="comment" />
-            
+
+            <img src={comment} alt="comment" />
+
             <p>{comments.length > 0 ? comments.length : ''}</p>
           </span>
         </div>
@@ -69,23 +105,11 @@ export default function PostItem({ details }: { details: PostDetails }) {
           comments.length ?
             <div className="commentDisplay">
 
-              {comments.splice(0, comments.length > 3 ? 3 : comments.length).map((commentInfo) => {
-                let h: currentUser | undefined;
-                (async () => {
-                  h = await getUserById(commentInfo.userId)
-                })()
-                return h != undefined ? (<div key={commentInfo.text + '' + Math.random()} className="commenHint">
-                  <img src={postOwner.avatarUrl == "" ? defaultAvatar : postOwner.avatarUrl} alt={postOwner.username} width='50px' height='50px' />
-                  <div className="details">
-                    <p className="username">{postOwner.username}</p>
-                  </div>
-                  <div className="comment">
-                    <p>{commentInfo.text}</p>
-                  </div>
-                </div>) : null
-              })}
+              {comments.slice(0, comments.length > 3 ? 3 : comments.length).map((commentInfo) => <CommentHint commentInfo={commentInfo}
+                key={commentInfo.comment + '' + Math.random()}/>)}
             </div> : null
         }
+        <Form details={details} />
       </>
     </article>
 
@@ -101,7 +125,8 @@ export type PostDetails = {
   imagePath?: string;
   likes: string[];
 }
-type comment = {
-  text: string;
+export type comment = {
+  comment: string;
   userId: string;
+  date: number;
 }

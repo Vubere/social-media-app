@@ -6,34 +6,34 @@ import { getAuth } from "firebase/auth";
 
 import defaultAvatar from '../../assets/defaultAvatar.jpg'
 
-export default function Chatbubble({ message, document, time, person, className, d , e}: Chatbubble) {
+export default function Chatbubble({ message, doc, time, person, className, d, e }: Chatbubble) {
   const { currentUser } = getAuth()
-  
+
 
   useEffect(() => {
-    if (d) {
-      if (d.i - d.j == 0) {
-        if (e.current != undefined) {
-          e.current.focus()
-        }
+
+    if (d.i == d.j) {
+      if (e.current != undefined) {
+        e.current.scrollIntoView(true)
       }
     }
+
   }, [])
 
   return (<div>
     {
       currentUser != null &&
       <>
-        <section className={className} >
+        <section className={className} ref={d.i == d.j ? e : undefined}>
           {currentUser.uid != person.userID && <div className="avatar">
             <img src={person.avatarUrl == '' ? defaultAvatar : person.avatarUrl} alt="avatar" width="30px" />
           </div>}
           <div className="message">
-            {document != '' ?
-              <img src={document} alt='document' width='200px' /> :
+            {doc != '' ?
+              <img src={doc} alt='document' width='200px' height='250px'/> :
               null}
             <p>{message}</p>
-            <div className="time" ref={e}>
+            <div className="time" >
               <p>{formatRelative(subDays(Number(time), 0), new Date())}</p>
             </div>
           </div>
@@ -45,7 +45,7 @@ export default function Chatbubble({ message, document, time, person, className,
 
 type Chatbubble = {
   message: string;
-  document: string;
+  doc: string;
   time: string;
   person: currentUser;
   className: string;

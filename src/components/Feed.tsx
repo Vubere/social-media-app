@@ -16,7 +16,7 @@ export default function Feed() {
 
 
   const dispatch = useAppDispatch()
-  const {feed}:{feed:PostDetails[]|[]} = useAppSelector<{feed:PostDetails[]|[]}>(state => state.feed)
+  const { feed }: { feed: PostDetails[] | [] } = useAppSelector<{ feed: PostDetails[] | [] }>(state => state.feed)
 
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function Feed() {
     {feed.length != 0 ?
       <section className='feed'>
         {
-        feed.map((item:PostDetails) => {
+          feed.map((item: PostDetails) => {
             return (<PostItem key={item.date} details={item} />)
           }
           )

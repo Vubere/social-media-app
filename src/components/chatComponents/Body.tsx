@@ -18,6 +18,9 @@ export default function ChatBody({user, receiver}:{user:currentUser, receiver:cu
         setChatArray(data[receiver.userID])
       }
     })
+    if(lastMessage.current!=undefined){
+      lastMessage.current.scrollIntoView()
+    }
     return unsub
   },[])
   
@@ -25,10 +28,12 @@ export default function ChatBody({user, receiver}:{user:currentUser, receiver:cu
     <section className="body">
       {chatArray.length?chatArray.map((chat:any, i:number)=>
       <>
-          <Chatbubble message={chat.message} time={chat.time} document={chat.document} person={chat.sender===user.userID?user:receiver}
+          <Chatbubble message={chat.message} time={chat.time} doc={chat.document} person={chat.sender===user.userID?user:receiver}
           d={{i, j:chatArray.length-1}}
             className={chat.sender === user.userID ? 'right chatbubble': 'left chatbubble'}
-            e={lastMessage}/>
+            e={lastMessage}
+            key={chat.time}
+            />
       </>
       ):<p>
         start a chat...
