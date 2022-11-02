@@ -114,5 +114,9 @@ export type currentUser = {
   following: string[],
   dateCreated: string,
   email: string,
+  posts: string[],
+  postLength: number,
   userID: string,
+  notifications: string[],
+  unreadNotifications: number,
 }

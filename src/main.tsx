@@ -34,6 +34,8 @@ export const storage = getStorage(app)
 export const auth = getAuth(app)
 
 import { profileContext } from './pages/Profile';
+import Loading from './components/loading'
+
 
 const App = lazy(() => import('./App'))
 const Main = lazy(() => import('./components/profileComponents/Main'))
@@ -53,7 +55,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Provider store={store}>
     <React.StrictMode>
 
-      <Suspense fallback={<div>loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <ErrorBoundary>
           <BrowserRouter>
             <Routes>

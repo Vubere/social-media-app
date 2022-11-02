@@ -3,67 +3,46 @@ import { useEffect, useState } from "react";
 
 import { formatRelative, subDays } from "date-fns";
 
-import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../../main";
 
 import Form from "./CommentForm";
 import CommentHint from "./CommentHint";
+import Reactions from "./Reactions";
 
 import { getUserById } from "../../helpers/helpers";
 
 import { currentUser } from "../profileComponents/Header";
 
 import defaultAvatar from "../../assets/defaultAvatar.jpg"
-import noLike from "../../assets/noLike.svg"
-import liked from '../../assets/liked.png'
+
 import comment from '../../assets/addComment.svg'
 
 
-export default function PostItem({ details }: { details: PostDetails }) {
-  const [likeArr, setLikes] = useState(details.likes)
+export default function PostItem({ postId }: { postId: string }) {
 
-  const { user, caption, comments, date, imagePath } = details
   const [postOwner, setPostOwner] = useState<currentUser | undefined>()
-  const { currentUser } = getAuth()
-
-  const handleLike = async () => {
-    if (currentUser != null) {
-      const docRef = doc(db, 'post', details.user)
-      if (likeArr.includes(currentUser.uid)) {
-        await updateDoc(docRef, {
-          [`${date}.likes`]: arrayRemove(currentUser.uid)
-        })
-        const h = await getDoc(docRef)
-        let l = h.data()
-        if (l != undefined) {
-          const f = l[date].likes
-          setLikes(f)
-        }
-      } else {
-        setLikes(likeArr.concat([currentUser.uid]))
-        await updateDoc(docRef, {
-          [`${date}.likes`]: arrayUnion(currentUser.uid)
-        })
-      }
-    }
-  }
+  const [postDetails, setPostDetails] = useState<PostDetails | undefined>()
 
 
   useEffect(() => {
-    (async () => {
-      try {
-        const UserDetails = await getUserById(user)
-        if (UserDetails) {
-          setPostOwner(UserDetails)
-        }
-      } catch (error) {
-
+    const docRef = doc(db, 'post', postId)
+    const unsubscribe = onSnapshot(docRef, (doc) => {
+      if (doc.exists()) {
+        const post = doc.data() as PostDetails
+        (async () => {
+          const user = await getUserById(post.user)
+          setPostOwner(user)
+        })()
+        setPostDetails(doc.data() as PostDetails)
       }
-    })()
-  }, [details])
+    })
+    return unsubscribe
+  }, [postId])
+  
 
-  return postOwner !== undefined ? (
+  return postDetails !== undefined && postOwner !== undefined ? (
     <article className="postItem">
       <>
         <header>
@@ -79,37 +58,23 @@ export default function PostItem({ details }: { details: PostDetails }) {
           <div className="options">...</div>
         </header>
         <p className="text">
-          {caption}
+          {postDetails.caption}
         </p>
-        {imagePath !== '' &&
+        {postDetails.imagePath !== '' &&
           <div className="img">
-            <img src={imagePath} alt="post Image" width='80%' />
+            <img src={postDetails.imagePath} alt="post Image" width='80%' />
           </div>
         }
-        <div className="reactions">
-          <span className="like" >
-
-            <img src={currentUser != undefined ? likeArr.includes(currentUser.uid) ? liked : noLike : noLike} alt="like"
-              onClick={handleLike} />
-
-            <p>{likeArr.length > 0 ? likeArr.length : ''}</p>
-          </span>
-          <span className="comment">
-
-            <img src={comment} alt="comment" />
-
-            <p>{comments.length > 0 ? comments.length : ''}</p>
-          </span>
-        </div>
+        <Reactions details={postDetails} id={postId}/>
         {
-          comments.length ?
+          postDetails.comments.length ?
             <div className="commentDisplay">
 
-              {comments.slice(0, comments.length > 3 ? 3 : comments.length).map((commentInfo) => <CommentHint commentInfo={commentInfo}
-                key={commentInfo.comment + '' + Math.random()}/>)}
+              {postDetails.comments.slice(0, postDetails.comments.length > 3 ? 3 : postDetails.comments.length).map((commentInfo) => <CommentHint commentInfo={commentInfo}
+                key={commentInfo.comment + '' + Math.random()} />)}
             </div> : null
         }
-        <Form details={details} />
+        <Form details={postDetails} />
       </>
     </article>
 

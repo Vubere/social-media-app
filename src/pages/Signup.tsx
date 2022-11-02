@@ -47,6 +47,8 @@ function Signup() {
             following: [],
             likes: [],
             messages: [],
+            posts: [],
+            postLength: 0,
             dateCreated: Date.now()
           })
           navigate(routes.login)

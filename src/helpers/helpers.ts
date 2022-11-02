@@ -7,8 +7,7 @@ import {
   setDoc,
   getDoc,
   doc,
-  FieldValue,
-  increment,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../main";
 import { User, getAuth } from "firebase/auth";
@@ -24,18 +23,18 @@ export async function doesUserNameExist(username: string) {
   return !snapShot.empty;
 }
 
-
 export async function getSuggestions(user: currentUser) {
   let arr: any = [];
   const docRef = collection(db, "users");
-  const snapShot = await getDocs(docRef);
-  snapShot.forEach((doc) => {
-    if (
-      !doc.data()?.followers?.includes(user.userID) &&
-      doc.data()?.username != user.username
-    ) {
-      arr.push(doc.data());
-    }
+  onSnapshot(docRef, (docs) => {
+    docs.forEach((doc) => {
+      if (
+        !doc.data()?.followers?.includes(user.userID) &&
+        doc.data()?.username != user.username
+      ) {
+        arr.push(doc.data());
+      }
+    });
   });
   return arr.slice(0, 20);
 }
@@ -46,10 +45,10 @@ export async function toggleFollowAUser(
   followed: boolean
 ) {
   const auth = getAuth();
-  
+
   try {
     setFollowing(!followed);
-    
+
     const curUserUid = auth.currentUser?.uid;
     if (curUserUid != undefined) {
       const docRef = doc(db, "users", following.userID);
@@ -94,19 +93,26 @@ export async function sendNotification(
   sender: string,
   details: string
 ) {
-  const docRef = doc(db, "notifications", userID);
   const time = Date.now();
+  const id = userID + "" + time;
+  const notifRef = doc(db, "notifications", id);
+  const userRef = doc(db, "notifications", id);
   await setDoc(
-    docRef,
+    notifRef,
     {
-      [time]: {
-        type,
-        time: time,
-        details,
-        seen: false,
-        sender
-      },
-      unread: increment(1),
+      type,
+      time: time,
+      details,
+      seen: false,
+      sender,
+      unread: true,
+    },
+    { merge: true }
+  );
+  await setDoc(
+    userRef,
+    {
+      notifications: arrayUnion(id),
     },
     { merge: true }
   );

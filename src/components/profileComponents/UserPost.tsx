@@ -14,7 +14,7 @@ export default function Feed({ user }: { user: currentUser }) {
   useEffect(() => {
     (async () => {
 
-      const docRef = doc(db, 'post', user.userID)
+      const docRef = doc(db, 'users', user.userID)
       const ref = await getDoc(docRef)
       const post: any = ref.data()
       const arr = []
@@ -22,14 +22,13 @@ export default function Feed({ user }: { user: currentUser }) {
         arr.push(post[val])
       }
       setPostList(arr)
-
     })()
   }, [user])
   return (
     <div className="userUploads">
       {postList.length ? <>
-        {postList.map((data) =>
-          <PostItem key={data.date} details={data} />)
+        {user.posts.map((id:string) =>
+          <PostItem key={id+'p'} postId={id} />)
         }
       </> : <div className='userPost'>no post available</div>}
     </div>

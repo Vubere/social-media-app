@@ -4,10 +4,11 @@ import { doc, getDoc, onSnapshot } from 'firebase/firestore'
 import { useState, useEffect } from 'react'
 import { getUserById } from '../helpers/helpers'
 import { db } from '../main'
+import NotificationHint from '../components/NotificationsHint'
 
 
 export default function NotificationsList() {
-  const [notifications, setNotifications] = useState<notification[]>()
+  const [notificationsArr, setNotifications] = useState<any[]>()
   const [unread, setUnread] = useState(0)
   const { currentUser } = getAuth()
 
@@ -15,19 +16,9 @@ export default function NotificationsList() {
     let unsub: any = () => { }
     (async () => {
       if (currentUser != null) {
-        const docRef = doc(db, 'notifications', currentUser.uid)
-        unsub = onSnapshot(docRef, async (res) => {
-          const data = res.data()
-          if (data != undefined) {
-            let temp = []
-            for (let i in data) {
-              if (typeof data[i] != 'number') {
-                temp.push(data[i])
-              }
-            }
-            setNotifications(temp)
-          }
-        })
+        const {notifications} = await getUserById(currentUser.uid)
+        setNotifications(notifications)
+        
       }
     })()
     return unsub
@@ -38,14 +29,11 @@ export default function NotificationsList() {
         <h2>Notifications</h2>
       </header>
       {
-        notifications != undefined ?
+        notificationsArr != undefined ?
           <div className='list'>
-            {notifications.length > 0 ?
-              notifications.sort((a, b) => b.time - a.time).map((list) =>
-                <section className={`${list.seen == false ? "unread Notif" : "Notif"}`} key={list.time}>
-                  <div>{list.details}</div>
-                  <div>{format(list.time, 'hh:mm')}</div>
-                </section>) :
+            {notificationsArr.length > 0 ?
+              notificationsArr.sort((a, b) => b - a).map((id:string) =>
+               <NotificationHint key={id} id={id}/>) :
               <p>you have no notification</p>
             }
           </div>
@@ -55,7 +43,7 @@ export default function NotificationsList() {
     </section>
   )
 }
-type notification = {
+export type notification = {
   details: string,
   sender: string,
   seen: boolean,

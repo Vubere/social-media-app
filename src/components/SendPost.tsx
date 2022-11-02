@@ -1,10 +1,11 @@
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { getAuth } from 'firebase/auth'
 import { useState } from 'react'
-import { setDoc, doc, increment } from 'firebase/firestore'
+import { setDoc, doc, increment, arrayRemove, arrayUnion } from 'firebase/firestore'
 import { db } from '../main'
 
 import Camera from "../assets/camera.svg"
+
 
 export default function SendPost() {
   const [post, setPost] = useState('')
@@ -26,17 +27,20 @@ export default function SendPost() {
           const res = await uploadBytes(storageRef, file)
           path = await getDownloadURL(res.ref)
         }
-        const docRef = await doc(db, 'post', currentUser.uid)
-        await setDoc(docRef, {
-          [date]: {
-            user: currentUser.uid,
-            caption: post,
-            imagePath: path,
-            comments: [],
-            likes: [],
-            date: date,
-            sender: currentUser.uid
-          },
+        const itemId = currentUser.uid + '' + date
+        const postRef = doc(db, 'post', itemId)
+        const userRef = doc(db, 'users', currentUser.uid)
+        await setDoc(postRef, {
+          user: currentUser.uid,
+          caption: post,
+          imagePath: path,
+          comments: [],
+          likes: [],
+          date: date,
+          sender: currentUser.uid,
+        })
+        await setDoc(userRef, {
+          posts: arrayUnion(itemId),
           postLength: increment(1)
         }, { merge: true })
         setPost('')
@@ -72,9 +76,9 @@ export default function SendPost() {
           autoComplete='off' />
         <div className="icons">
           <label htmlFor="file">
-            <img src={Camera} alt=""  width='20px'
-            height='20px'/>
-            </label>
+            <img src={Camera} alt="" width='20px'
+              height='20px' />
+          </label>
           <input type="file" name="file"
             className='file'
             id="file" multiple={true}

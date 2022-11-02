@@ -42,7 +42,7 @@ function App() {
       }
     })()
 
-  }, [currentUser])
+  }, [currentUser, auth])
 
   return (
     <div className="App">
