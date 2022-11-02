@@ -1,29 +1,31 @@
-import { User } from 'firebase/auth'
+import { getAuth, User } from 'firebase/auth'
 import {useEffect, useState} from 'react'
 import { useAppSelector } from '../app/hooks'
 
-import { getSuggestions } from "../helpers/helpers"
+import { getSuggestions, getUserById } from "../helpers/helpers"
 import useUserDetails from '../hooks/useUser'
 import { currentUser } from './profileComponents/Header'
 import UserHint from './UserHint'
 
 
 export default function Suggestion() {
-  const {user} = useAppSelector<{user:currentUser|null}>(state=>state.user)
-  const [currentUser] = useUserDetails(user?.username as string)
   const [suggestions, setSuggestions] = useState<currentUser[]>([])
+  const {currentUser} = getAuth()
+  const [user, setUser] = useState<currentUser|undefined>()
+  console.log(suggestions, user)
   
   useEffect(()=>{
     (async ()=>{
-    
-      if(currentUser!=undefined){
-        const h = await getSuggestions(currentUser)
-        setSuggestions(h)
+      if(currentUser!=null){
+        const userDetails = await getUserById(currentUser.uid)
+        const s = await getSuggestions(userDetails)
+        setSuggestions(s)
+        setUser(userDetails)
       }
     })()
   }, [currentUser])
   return (
-   currentUser!=null?
+   user!=undefined?
   <div className="suggestions">
     {suggestions.length?
     suggestions.map((data)=><UserHint key={user?.userID} user={data}/>):

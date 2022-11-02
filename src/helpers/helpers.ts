@@ -24,19 +24,20 @@ export async function doesUserNameExist(username: string) {
 }
 
 export async function getSuggestions(user: currentUser) {
-  let arr: any = [];
+  const arr: any = [];
   const docRef = collection(db, "users");
-  onSnapshot(docRef, (docs) => {
-    docs.forEach((doc) => {
-      if (
-        !doc.data()?.followers?.includes(user.userID) &&
-        doc.data()?.username != user.username
-      ) {
-        arr.push(doc.data());
-      }
-    });
+  const docs = await getDocs(docRef);
+  docs.forEach((doc) => {
+    const data = doc.data();
+    if (data != undefined) {
+      arr.push(data);
+    }
   });
-  return arr.slice(0, 20);
+  return arr.filter((a:currentUser)=>{
+    const conditionOne = !a.followers.includes(user.userID)
+    const conditionTwo = user.username!=a.username
+    return conditionOne&&conditionTwo
+  }).slice(0, 10);
 }
 
 export async function toggleFollowAUser(
