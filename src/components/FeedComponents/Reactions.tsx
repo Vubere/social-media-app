@@ -12,7 +12,7 @@ import liked from '../../assets/liked.png'
 import comment from '../../assets/addComment.svg'
 
 
-export default function Reactions({details, id}:{details:PostDetails, id:string}){
+export default function Reactions({details, id, commentRef}:{details:PostDetails, id:string, commentRef:any}){
   const [likeArr, setLikes] = useState(details.likes)
   const {currentUser} = getAuth()
   const {date, comments} = details
@@ -46,7 +46,8 @@ export default function Reactions({details, id}:{details:PostDetails, id:string}
 
             <p>{likeArr.length > 0 ? likeArr.length : ''}</p>
           </span>
-          <span className="comment">
+          <span className="comment"
+          onClick={()=>commentRef.current.focus()}>
 
             <img src={comment} alt="comment" />
 

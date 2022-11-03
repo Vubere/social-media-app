@@ -6,6 +6,7 @@ import {
   arrayRemove,
   setDoc,
   getDoc,
+  updateDoc,
   doc,
   onSnapshot,
 } from "firebase/firestore";
@@ -24,16 +25,19 @@ export async function doesUserNameExist(username: string) {
 }
 
 export async function getSuggestions(user: currentUser) {
-  const arr: any = [];
+  console.log(user)
+  const arr: currentUser[] = [];
   const docRef = collection(db, "users");
   const docs = await getDocs(docRef);
   docs.forEach((doc) => {
-    const data = doc.data();
+    const data = doc.data() as currentUser;
     if (data != undefined) {
+      console.log(data)
       arr.push(data);
     }
   });
-  return arr.filter((a:currentUser)=>{
+  return arr.filter((a)=>{
+   // console.log(a)
     const conditionOne = !a.followers.includes(user.userID)
     const conditionTwo = user.username!=a.username
     return conditionOne&&conditionTwo
@@ -97,7 +101,7 @@ export async function sendNotification(
   const time = Date.now();
   const id = userID + "" + time;
   const notifRef = doc(db, "notifications", id);
-  const userRef = doc(db, "notifications", id);
+  const userRef = doc(db, "users", userID);
   await setDoc(
     notifRef,
     {
@@ -110,11 +114,10 @@ export async function sendNotification(
     },
     { merge: true }
   );
-  await setDoc(
+  await updateDoc(
     userRef,
     {
       notifications: arrayUnion(id),
     },
-    { merge: true }
   );
 }

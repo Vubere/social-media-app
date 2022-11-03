@@ -14,6 +14,7 @@ import { setFeed } from '../slices/feedSlice'
 export default function Feed() {
   const { currentUser } = getAuth()
   const [postsIds, setPostsIds] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
 
 
   useEffect(() => {
@@ -21,29 +22,36 @@ export default function Feed() {
       (async () => {
         const curUser = await getUserById(currentUser.uid)
         let temp: any[] = [...curUser.posts]
-        const mapArr = [...curUser.following]
-        if(mapArr.length!=0)
-        mapArr.forEach((v) => {
-          (async()=>{
+        
+        curUser.following.forEach((v, i) => {
+          (async()=>{ 
             const user = await getUserById(v)
-            temp.concat(user.posts)
+            temp.push(...user.posts)
+            if(curUser.following.length-1==i){
+              setPostsIds(temp)
+            }
           })()
         })
         
-        setPostsIds(postsIds.concat(temp))  
+      
+        setLoading(false)  
       })()
     }
   }, [currentUser])
   return (<>
-    {postsIds.length != 0 ?
+    {!loading?postsIds.length != 0 ?
       <section className='feed'>
         {
-          postsIds.map((item: string) => {
+          postsIds.sort((a:any,b:any)=>{
+            let d1 = a.slice(a.length-10, a.length)
+            let d2 = b.slice(b.length-10, b.length)
+            return Number(d2-d1)
+          }).map((item: string) => {
             return (<PostItem key={item} postId={item} />)
           }
           )
         }
-      </section>
+      </section>:<div>no post to display</div>
       : <Loading />}
   </>)
 }

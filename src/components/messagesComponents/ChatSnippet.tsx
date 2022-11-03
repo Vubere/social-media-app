@@ -9,6 +9,8 @@ import { useAppDispatch } from "../../app/hooks"
 import { setReceiver } from "../../slices/chatSlice"
 import { formatDistance, subDays } from "date-fns"
 
+import Avatar from '../../assets/defaultAvatar.jpg'
+
 export default function ChatSnippet({ details }: { details: snippetDetails }) {
   const [chattingWith, setChattingWith] = useState<currentUser>()
   const dispatch = useAppDispatch()
@@ -28,7 +30,7 @@ export default function ChatSnippet({ details }: { details: snippetDetails }) {
       }}>
         <section className="chatSnippet">
           <div className="avatar">
-            <img src={chattingWith.avatarUrl} width="40px" alt="avatar" />
+            <img src={chattingWith.avatarUrl==''?Avatar:chattingWith.avatarUrl} width="40px" alt="avatar" />
           </div>
           <div className="rest">
             <div className="name">

@@ -16,17 +16,25 @@ export default function FollowPage() {
 
   useEffect(() => {
     if(userInfo==undefined) return
+    let arr:currentUser[] = []
     if (type == 'followers') {
-      userInfo.followers.forEach(async (id: string) => {
+      userInfo.followers.forEach(async (id: string, i) => {
         const d = await getUserById(id)
-        setFollowData(prev => [...prev, d])
+        arr.push(d)
+        if(i===userInfo.followers.length-1){
+          setFollowData(arr)
+        }
       })
     } else {
-      userInfo.following.forEach(async (id: string) => {
+      userInfo.following.forEach(async (id: string, i) => {
         const d = await getUserById(id)
-        setFollowData(prev => [...prev, d])
+        arr.push(d)
+        if(i===userInfo.following.length-1){
+          setFollowData(arr)
+        }
       })
     }
+
   }, [userInfo, type])
   return (
     userInfo!=undefined?

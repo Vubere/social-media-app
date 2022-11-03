@@ -18,7 +18,6 @@ export default function NotificationsList() {
       if (currentUser != null) {
         const {notifications} = await getUserById(currentUser.uid)
         setNotifications(notifications)
-        
       }
     })()
     return unsub
