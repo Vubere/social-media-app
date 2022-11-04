@@ -49,6 +49,7 @@ const NoMatch = lazy(() => import('./pages/NoMatch'))
 const Messages = lazy(() => import('./pages/Messages'))
 const Chat = lazy(() => import('./pages/Chat'))
 const Notifications = lazy(() => import('./pages/NotificationList'))
+const PostCommentsPage = lazy(()=>import('./pages/PostCommentsPage'))
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -63,6 +64,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <Route index path={routes.dashboard} element={<Dashboard />} />
                 <Route path={routes.login} element={<Login />} />
                 <Route path={routes.signup} element={<Signup />} />
+                <Route path={'/post/:id/comments'}
+                element={<PostCommentsPage/>}/>
                 <Route path={routes.messages} element={<Messages />} />
                 <Route path={routes.notifications} element={<Notifications />} />
                 <Route path={`${routes.chats}/:username`} element={<Chat />} />

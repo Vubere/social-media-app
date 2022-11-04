@@ -1,10 +1,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { formatRelative, subDays } from "date-fns";
 
-import { arrayRemove, arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { doc,onSnapshot} from "firebase/firestore";
 import { db } from "../../main";
 
 import Form from "./CommentForm";
