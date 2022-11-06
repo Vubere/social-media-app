@@ -17,7 +17,6 @@ export default function Chatbubble({ message, doc, time, person, className, d, e
         e.current.scrollIntoView(true)
       }
     }
-
   }, [])
 
   return (<div>

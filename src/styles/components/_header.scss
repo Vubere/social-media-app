@@ -1,4 +1,4 @@
-.navigation{
+.navigation {
   display: flex;
   flex-direction: column;
   width: 38px;
@@ -8,7 +8,7 @@
   box-shadow: 2px 0px #00000042;
   position: absolute;
   left: 0;
-  nav{
+  nav {
     display: flex;
     width: 100%;
     margin-top: 10px;
@@ -16,12 +16,13 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    .link{
+    .link {
       padding: 5px;
       font-size: 0.4rem;
     }
-    & .homeImg{
+    & .homeImg {
       border: 1px solid #3337;
+      border-radius: 50%;
     }
   }
 }

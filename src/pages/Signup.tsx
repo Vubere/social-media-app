@@ -8,7 +8,7 @@ import * as routes from '../constants/routes'
 
 import { db } from '../main'
 
-import { useAppDispatch } from '../app/hooks'
+
 
 import { doesUserNameExist } from '../helpers/helpers'
 
@@ -47,6 +47,8 @@ function Signup() {
             following: [],
             likes: [],
             messages: [],
+            unreadNotifications: 0,
+            unreadMessages: 0,
             posts: [],
             postLength: 0,
             dateCreated: Date.now()

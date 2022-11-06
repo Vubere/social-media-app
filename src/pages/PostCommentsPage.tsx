@@ -13,12 +13,14 @@ import Form from "../components/FeedComponents/CommentForm"
 import { getUserById } from "../helpers/helpers"
 import { currentUser } from "../components/profileComponents/Header"
 
+
 import defaultAvatar from '../assets/defaultAvatar.jpg'
 
 export default function PostCommentsPage() {
   const { id } = useParams()
   const [post, setPost] = useState<PostDetails>()
   const [user, setUser] = useState<currentUser>()
+  const [comments, setComments] = useState<comment[]>()
 
   const commentRef = useRef<HTMLInputElement>()
 
@@ -35,13 +37,15 @@ export default function PostCommentsPage() {
               setUser(user)
             })()
             setPost(data as PostDetails)
+            const comArr:comment[] = Object.values(data.comments)
+            setComments(comArr)
           }
         }
       })
       return unsubscribe
     }
   }, [id])
-  return post != undefined&&user != undefined&& id!=undefined ? (<section className="commentsPage">
+  return post != undefined&&user != undefined&& id!=undefined&&comments!=undefined ? (<section className="commentsPage">
     <header>
       <section className="userInfo">
         <div className="imgHead">
@@ -64,6 +68,6 @@ export default function PostCommentsPage() {
     }
     <Reactions details={post} commentRef={commentRef} id={id} />
     <Form details={post} id={id} commentRef={commentRef} />
-    {post.comments.sort((a,b)=>b.date-a.date).map((val) => <CommentHint commentInfo={val} />)}
+    {comments.sort((a,b)=>b.date-a.date).map((val) => <CommentHint id={id}commentInfo={val} />)}
   </section>) : <></>
 }

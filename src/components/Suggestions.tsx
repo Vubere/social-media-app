@@ -24,7 +24,8 @@ export default function Suggestion() {
       }
     })()
   }, [currentUser])
-  return (
+  
+  return ( 
    user!=undefined?
   <div className="suggestions">
     {suggestions.length?

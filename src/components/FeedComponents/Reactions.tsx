@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-
+import { sendNotification } from "../../helpers/helpers"
 import { getAuth } from "firebase/auth"
 import { updateDoc, doc, getDoc, arrayRemove, arrayUnion } from "firebase/firestore"
 import { db } from "../../main"
@@ -31,6 +31,7 @@ export default function Reactions({details, id, commentRef}:{details:PostDetails
         await updateDoc(docRef, {
           likes: arrayUnion(currentUser.uid)
         })
+        sendNotification('like', details.user, currentUser.uid, `${currentUser.displayName} liked your comment`)
       }
     }
   }

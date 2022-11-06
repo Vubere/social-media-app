@@ -1,11 +1,10 @@
-
-.feed{
+.feed {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-article{
+article {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -13,29 +12,29 @@ article{
   box-shadow: 1px 1px 1px 1px #0005;
   padding: 10px;
   border: 1px solid #0003;
-  header{
+  header {
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    .userInfo{
+    .userInfo {
       display: flex;
       flex-direction: row;
-      .imgHead{
+      .imgHead {
         height: 40px;
-        
-        img{
+        img {
           border-radius: 50%;
-          height: 40px;
-          width: 40px;
+          border: 1px solid #3337;
+          height: 30px;
+          width: 30px;
         }
       }
-      .details{
+      .details {
         display: grid;
         place-items: center;
         width: 100%;
         min-width: 300px;
-        & p{
+        & p {
           width: 100%;
           margin-left: 10px;
           font-size: 0.8em;
@@ -43,17 +42,17 @@ article{
       }
     }
   }
-  .img{
+  .img {
     width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 10px;
-    img{
+    img {
       width: 95%;
       border-radius: 10px;
     }
   }
-  p.text{
+  p.text {
     width: 100%;
     font-size: 1.2em;
     text-align: left;
@@ -61,18 +60,19 @@ article{
     justify-content: flex-start;
     margin: 10px;
   }
-  .reactions{
-    
+  .reactions {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    .like, .comment{
+    .like,
+    .comment {
       cursor: pointer;
-      img{
+      img {
         height: 25px;
         width: 25px;
         background-color: none;
         border: none;
+        
         outline: none;
       }
     }

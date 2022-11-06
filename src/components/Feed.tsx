@@ -16,22 +16,24 @@ export default function Feed() {
   const [postsIds, setPostsIds] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
-
   useEffect(() => {
     if (currentUser != null && postsIds.length == 0) {
       (async () => {
         const curUser = await getUserById(currentUser.uid)
-        let temp: any[] = [...curUser.posts]
+        let temp: any[] = [curUser.userID, ...curUser.following]
+        let arr: any[] = []
+      
         
-        curUser.following.forEach((v, i) => {
+        temp.forEach((v, i) => {
           (async()=>{ 
             const user = await getUserById(v)
-            temp.push(...user.posts)
+            arr.push(...user.posts)
             if(curUser.following.length-1==i){
-              setPostsIds(temp)
+              setPostsIds(arr)
             }
           })()
         })
+        
         
       
         setLoading(false)  

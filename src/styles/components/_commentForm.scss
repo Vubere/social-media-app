@@ -1,0 +1,32 @@
+.inputComment{
+  width: 100%;
+  form{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    input{
+      width: 80%;
+      border: none;
+      border-bottom: 1px solid #3338;
+      display: block;
+      padding: 5px;
+      &:active, &:hover, &:focus{
+        border: 0;
+        border-bottom: 1px solid #3338;
+        outline: 0px;
+      }
+    }
+    button{
+      width: 70px;
+      padding: 7px;
+      background-color: blue;
+      color: white;
+      border: none;
+      border-radius: 3.5px;
+    }
+    .disabled{
+      background-color: #3338;
+    }
+  }
+}

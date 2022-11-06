@@ -25,19 +25,16 @@ export async function doesUserNameExist(username: string) {
 }
 
 export async function getSuggestions(user: currentUser) {
-  console.log(user)
   const arr: currentUser[] = [];
   const docRef = collection(db, "users");
   const docs = await getDocs(docRef);
   docs.forEach((doc) => {
     const data = doc.data() as currentUser;
     if (data != undefined) {
-      console.log(data)
       arr.push(data);
     }
   });
   return arr.filter((a)=>{
-   // console.log(a)
     const conditionOne = !a.followers.includes(user.userID)
     const conditionTwo = user.username!=a.username
     return conditionOne&&conditionTwo

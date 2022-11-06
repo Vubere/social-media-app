@@ -9,6 +9,8 @@
 @use "./pages/dashboard";
 @use "./pages/notifications";
 @use "./pages/messages";
+@use "./components/comments";
+@use "./components/commentForm";
 
 * {
   margin: 0;

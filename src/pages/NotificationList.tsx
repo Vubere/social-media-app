@@ -31,7 +31,7 @@ export default function NotificationsList() {
         notificationsArr != undefined ?
           <div className='list'>
             {notificationsArr.length > 0 ?
-              notificationsArr.sort((a, b) => b - a).map((id:string) =>
+              notificationsArr.sort((a, b) => b.time - a.time).map((id:string) =>
                <NotificationHint key={id} id={id}/>) :
               <p>you have no notification</p>
             }

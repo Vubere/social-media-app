@@ -1,4 +1,4 @@
-import { arrayUnion, doc, setDoc } from "firebase/firestore"
+import { arrayUnion, doc, increment, setDoc } from "firebase/firestore"
 import { ref, getStorage, uploadBytes, getDownloadURL } from "firebase/storage"
 import { useState } from "react"
 import { db } from "../../main"
@@ -41,6 +41,9 @@ export default function Input({ user, receiver }: chatters) {
       const res = await uploadBytes(storageRef, file)
       path = await getDownloadURL(res.ref)
     }
+    await setDoc(doc(db, 'users', receiver.userID), {
+      unreadMessages: increment(1)
+    }, {merge:true})
     await setDoc(docRefUser, {
       [receiver.userID]: arrayUnion({
         message: text,

@@ -1,4 +1,4 @@
-import { doc, setDoc, collection, arrayUnion } from 'firebase/firestore'
+
 import { getAuth } from 'firebase/auth'
 import {useState, useEffect} from 'react' 
 import {Link} from 'react-router-dom'
@@ -34,24 +34,24 @@ export default function UserHint({user}:{user:currentUser}){
 
 
   return (
-    <div className="userHint">
+    <section className="userHint">
       <Link to={`profile/${user.username}`}>
       <img src={user.avatarUrl!=''?user.avatarUrl:defaultAvatar} alt={user.username} />
       </Link>
       <Link to={`/profile/${user.username}`}>
       <div className="name">
-        <div className="fullname">
+        <p className="fullname">
           {user.fullName}
-        </div>
-        <div className="username">
+        </p>
+        <p className="username">
           @{user.username}
-        </div>
+        </p>
       </div>
       </Link>
       <button onClick={(e)=>follow(e)}
       className='followButton'>
         {following?'unfollow':'follow'}
       </button>
-    </div>
+    </section>
   )
 }

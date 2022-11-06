@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 
 
-import { doc,onSnapshot} from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../main";
 
 import Form from "./CommentForm";
@@ -23,8 +23,8 @@ export default function PostItem({ postId }: { postId: string }) {
 
   const [postOwner, setPostOwner] = useState<currentUser | undefined>()
   const [postDetails, setPostDetails] = useState<PostDetails | undefined>()
+  const [comments, setComments] = useState<comment[]>()
   const commentRef = useRef<HTMLInputElement>()
-
 
   useEffect(() => {
     const docRef = doc(db, 'post', postId)
@@ -36,13 +36,15 @@ export default function PostItem({ postId }: { postId: string }) {
           setPostOwner(user)
         })()
         setPostDetails(post)
+        const comArr:comment[] = Object.values(post.comments)
+        setComments(comArr)
       }
     })
     return unsubscribe
   }, [postId])
-  
 
-  return postDetails !== undefined && postOwner !== undefined ? (
+
+  return postDetails !== undefined && postOwner !== undefined &&comments!=undefined? (
     <article className="postItem">
       <>
         <header>
@@ -65,16 +67,16 @@ export default function PostItem({ postId }: { postId: string }) {
             <img src={postDetails.imagePath} alt="post Image" width='80%' />
           </div>
         }
-        <Reactions details={postDetails} commentRef={commentRef} id={postId}/>
+        <Reactions details={postDetails} commentRef={commentRef} id={postId} />
         {
-          postDetails.comments.length ?
+          comments.length ?
             <div className="commentDisplay">
 
-              {postDetails.comments.sort((a,b)=>b.date-a.date).slice(0, postDetails.comments.length > 3 ? 3 : postDetails.comments.length).map((commentInfo) => <CommentHint commentInfo={commentInfo}
-            
+              {comments.sort((a, b) => b.date - a.date).slice(0, comments.length > 3 ? 3 : comments.length).map((commentInfo) => <CommentHint commentInfo={commentInfo}
+                id={postId}
                 key={commentInfo.comment + '' + Math.random()} />)}
-                <Link to={`/post/${postId}/comments`}>See comments...</Link>
-            </div> : <div className="noComments">no comments...</div>
+              <Link to={`/post/${postId}/comments`}>See comments...</Link>
+            </div> : <div className="noComments"></div>
         }
         <Form details={postDetails} id={postId} commentRef={commentRef} />
       </>
@@ -87,7 +89,7 @@ export default function PostItem({ postId }: { postId: string }) {
 export type PostDetails = {
   user: string;
   caption: string;
-  comments: comment[];
+  comments: any;
   date: number;
   imagePath?: string;
   likes: string[];
@@ -96,4 +98,6 @@ export type comment = {
   comment: string;
   userId: string;
   date: number;
+  likes: string[];
+  commentId: string
 }
