@@ -50,10 +50,18 @@ header{
   border-right: 2px solid #22222261;
   position: absolute;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   justify-content: center;
   left: 40px;
+  @media screen and (max-width: 600px) {
+    width: 100vw;
+    position: relative;
+    left: 0;
+    height: calc(100vh - 48px);
+    border: none;
+  }
 }
  
 

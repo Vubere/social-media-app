@@ -1,15 +1,18 @@
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { getAuth } from 'firebase/auth'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { setDoc, doc, increment, arrayRemove, arrayUnion } from 'firebase/firestore'
 import { db } from '../main'
 
 import Camera from "../assets/camera.svg"
+import close from "../assets/close.svg"
 
 
 export default function SendPost() {
   const [post, setPost] = useState('')
   const [file, setFile] = useState<any>()
+  const fileRef = useRef<any>()
+  const imageRef = useRef<any>()
   const disabled = post == '' && file == undefined
 
   const handlePostSubmit = async (e: React.FormEvent) => {
@@ -44,6 +47,7 @@ export default function SendPost() {
           postLength: increment(1)
         }, { merge: true })
         setPost('')
+        setFile(undefined)
 
       }
     } catch (error) {
@@ -51,15 +55,21 @@ export default function SendPost() {
     }
   }
 
-  const handleFileChange = (e: React.FormEvent) => {
+  const handleFileChange = (e: any) => {
     let f: HTMLInputElement | null = document.querySelector('.file')
     if (f != null) {
       const fileList = f.files
       if (fileList != null) {
-        const fileArr = Array.from(fileList)
-        console.log(fileArr)
-        setFile(fileList[0])
-      }
+        if (fileList[0]) {
+          const fileArr = Array.from(fileList)
+          setFile(fileList[0])
+          const reader = new FileReader()
+          reader.onload = (e) => {
+            imageRef.current.src = e.target?.result
+          }
+          reader.readAsDataURL(fileList[0])
+        }
+      } 
     }
   }
 
@@ -80,12 +90,14 @@ export default function SendPost() {
               height='20px' />
           </label>
           <input type="file" name="file"
+          ref={fileRef}
             className='file'
             id="file" multiple={true}
             onChange={(e) => handleFileChange(e)} />
           <div className='button'>
 
             <button type='submit'
+            id=''
               aria-label='submit post'
               className={!disabled ? 'blue' : ''}
               disabled={disabled}
@@ -93,6 +105,16 @@ export default function SendPost() {
 
           </div>
         </div>
+        {file != undefined &&
+          <div className="imagePreview">
+            <img src={close}  alt='close' className="x" onClick={() => { 
+              if(fileRef){
+                fileRef.current.value = null
+              }
+              setFile(undefined) }}/>
+            <img ref={imageRef} alt="imagePreview" src="#" className='preview' />
+          </div>
+        }
       </form>
     </div>
   )

@@ -41,6 +41,25 @@
     input[type='file']{
       display: none;
     }
+    .imagePreview{
+      width: 100px;
+      margin-left: 10px;
+      position: relative;
+      .x{
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        background-color: #fff3;
+        border: 1px solid black;
+        border-radius: 50%;
+        width: 15px;
+      }
+      .preview{
+        width: 100px;
+        border-radius: 10px;
+        border: 1px solid #3338;
+      }
+    }
     .button{
       width: 100%;
       display: flex;
