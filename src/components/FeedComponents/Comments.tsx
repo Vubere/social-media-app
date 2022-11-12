@@ -10,7 +10,7 @@ export default function Comments({postDetails, postId, length}:{postDetails:Post
   useEffect(()=>{
     const comArr:comment[] = Object.values(postDetails.comments)
     setComments(comArr)
-  },[postDetails])
+  },[])
 
   return (<>
     {

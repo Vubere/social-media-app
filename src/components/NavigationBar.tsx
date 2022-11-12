@@ -1,4 +1,4 @@
-import { useEffect, useState  } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import * as routes from '../constants/routes'
 
@@ -9,6 +9,7 @@ import { getAuth, signOut } from 'firebase/auth'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { db } from '../main'
 
+import Avatar from './Avatar'
 
 
 import defaultAvatar from '../assets/defaultAvatar.jpg'
@@ -37,9 +38,9 @@ export default function Header() {
       (() => {
         const docRef = doc(db, 'users', currentUser.uid)
         onSnapshot(docRef, (doc) => {
-          let data:any = doc.data()
-          if(data){
-            const {unreadNotification, unReadMessage} = data
+          let data: any = doc.data()
+          if (data) {
+            const { unreadNotification, unReadMessage } = data
           }
         })
       })()
@@ -73,10 +74,11 @@ export default function Header() {
               <img src={logoutIcon} alt="" className='logOutImg' width='80%' />
             </Link>
             <Link to={`${routes.profile}/${auth.currentUser.displayName}`} title='profile' className='Link'
-              onClick={() => navigate(routes.profile)}>
-              <img src={auth.currentUser.photoURL != null && auth.currentUser.photoURL != '' ? auth.currentUser.photoURL : defaultAvatar} alt="" className='homeImg' width='30px'
-                height="30px"
-                 />
+            >
+              <div className="homeImg">
+
+                <Avatar id={auth.currentUser.uid} />
+              </div>
             </Link>
           </nav>
         </header> :

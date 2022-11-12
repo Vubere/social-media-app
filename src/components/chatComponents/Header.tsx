@@ -1,13 +1,14 @@
 import { currentUser } from "../profileComponents/Header";
 import defaultAvatar from '../../assets/defaultAvatar.jpg'
 import backArrow from '../../assets/backArrow.svg'
+import Avatar from "../Avatar";
 
 export default function ChatHeader({ receiver }: { receiver: currentUser }) {
   return (
     <section className="header">
       <section className="userDetails">
-        <span className="receiverImage">
-          <img src={receiver.avatarUrl!=''?receiver.avatarUrl:defaultAvatar} alt="receiver image" width="40px" height='40px' />
+        <span className="receiverImage"> 
+          <Avatar id={receiver.userID}/>
         </span>
         <span className="receiverName">
           <p className="name">

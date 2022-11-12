@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { uploadBytes, ref, getStorage, getDownloadURL } from 'firebase/storage'
 import { setDoc, doc } from 'firebase/firestore'
@@ -23,6 +23,7 @@ export default function EditProfile() {
   const { currentUser } = getAuth()
   const disabledFile = file === undefined
 
+  const imageRef = useRef<any>()
   const [rePwd, setRePwd] = useState('')
 
   const handleFileChange = () => {
@@ -31,6 +32,17 @@ export default function EditProfile() {
       const fileList = f.files
       if (fileList != null) {
         setFile(fileList[0])
+        if (fileList[0]) {
+          
+          const reader = new FileReader()
+          reader.onload = (e) => {
+            if(imageRef.current!=undefined){
+              imageRef.current.style.backgroundImage = `url(${e.target?.result})` as string
+              console.log(imageRef.current)
+            }
+          }
+          reader.readAsDataURL(fileList[0])
+        }
       }
     }
   }
@@ -138,7 +150,9 @@ export default function EditProfile() {
           </div>
           :
           <>
-            <div className="profilePix" style={{
+            <div className="profilePix" 
+            ref={imageRef}
+            style={{
               'backgroundImage': currentUser != undefined ?
                 currentUser.photoURL != null && currentUser.photoURL != '' ?
                   `url(${currentUser.photoURL})` : `url(${avatar})` : `url(${avatar})`,

@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 
 
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../main";
 
 import Form from "./CommentForm";
@@ -14,7 +14,7 @@ import { getUserById } from "../../helpers/helpers";
 
 import { currentUser } from "../profileComponents/Header";
 
-import defaultAvatar from "../../assets/defaultAvatar.jpg"
+import Avatar from "../Avatar";
 
 import comment from '../../assets/addComment.svg'
 
@@ -27,8 +27,7 @@ export default function PostItem({ postId }: { postId: string }) {
   const commentRef = useRef<HTMLInputElement>()
 
   useEffect(() => {
-    const docRef = doc(db, 'post', postId)
-    const unsubscribe = onSnapshot(docRef, (doc) => {
+    /*   const unsubscribe = onSnapshot(docRef, (doc) => {
       if (doc.exists()) {
         const post = doc.data() as PostDetails
         (async () => {
@@ -39,8 +38,20 @@ export default function PostItem({ postId }: { postId: string }) {
         const comArr:comment[] = Object.values(post.comments)
         setComments(comArr)
       }
-    })
-    return unsubscribe
+    }) */
+    (async()=>{
+      const docRef = doc(db, 'post', postId)
+      const docf = await getDoc(docRef)
+      let h = docf.data()
+      const post = docf.data() as PostDetails
+      (async () => {
+        const user = await getUserById(post.user)
+        setPostOwner(user)
+      })()
+      setPostDetails(post)
+      const comArr: comment[] = Object.values(post.comments)
+      setComments(comArr)
+    })()
   }, [postId])
 
 
@@ -50,7 +61,7 @@ export default function PostItem({ postId }: { postId: string }) {
         <header>
           <section className="userInfo">
             <div className="imgHead">
-              <img src={postOwner.avatarUrl == "" ? defaultAvatar : postOwner.avatarUrl} alt={postOwner.username} width='40px' />
+              <Avatar id={postOwner.userID}/>
             </div>
             <div className="details">
               <p className="fullname">{postOwner.fullName}</p>

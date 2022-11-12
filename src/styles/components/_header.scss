@@ -40,8 +40,12 @@
       font-size: 0.4rem;
     }
     & .homeImg {
-      border: 1px solid #3337;
-      border-radius: 50%;
+      img{
+        width: 30px;
+        border: 1px solid #3337;
+        border-radius: 50%;
+        height: 30px;
+      }
     }
   }
 }

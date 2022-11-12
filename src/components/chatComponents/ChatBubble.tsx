@@ -4,7 +4,7 @@ import { currentUser } from "../profileComponents/Header";
 import { format, formatDistance, formatRelative, subDays } from "date-fns"
 import { getAuth } from "firebase/auth";
 
-import defaultAvatar from '../../assets/defaultAvatar.jpg'
+import Avatar from "../Avatar";
 
 export default function Chatbubble({ message, doc, time, person, className, d, e }: Chatbubble) {
   const { currentUser } = getAuth()
@@ -25,7 +25,7 @@ export default function Chatbubble({ message, doc, time, person, className, d, e
       <>
         <section className={className} ref={d.i == d.j ? e : undefined}>
           {currentUser.uid != person.userID && <div className="avatar">
-            <img src={person.avatarUrl == '' ? defaultAvatar : person.avatarUrl} alt="avatar" width="30px" />
+            <Avatar id={person.userID}/>
           </div>}
           <div className="message">
             {doc != '' ?

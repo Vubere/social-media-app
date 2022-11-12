@@ -8,7 +8,7 @@ import { setReceiver } from '../../slices/chatSlice'
 import { sendNotification } from '../../helpers/helpers'
 import useUserDetails from '../../hooks/useUser'
 
-import defaultAvatar from '../../assets/defaultAvatar.jpg'
+import Avatar from '../Avatar'
 
 export default function Header({ user }: { user: currentUser }) {
   const [following, setFollowing] = useState<boolean>(false)
@@ -50,7 +50,7 @@ export default function Header({ user }: { user: currentUser }) {
   return (
     <div className="profileHeader">
       <div className="image">
-        <img src={user.avatarUrl==''?defaultAvatar:user.avatarUrl} alt={user.username} />
+        <Avatar  id={user.userID}/>
       </div>
       <section className="details">
         <div className="userinfo">

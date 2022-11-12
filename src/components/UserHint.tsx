@@ -1,22 +1,22 @@
 
 import { getAuth } from 'firebase/auth'
-import {useState, useEffect} from 'react' 
-import {Link} from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { currentUser } from "./profileComponents/Header"
 
 import { sendNotification, toggleFollowAUser } from '../helpers/helpers'
 import useUserDetails from '../hooks/useUser'
 
-import defaultAvatar from '../assets/defaultAvatar.jpg'
+import Avatar from './Avatar'
 
-export default function UserHint({user}:{user:currentUser}){
+export default function UserHint({ user }: { user: currentUser }) {
   const [following, setFollowing] = useState<boolean>(false)
   const [userDetails] = useUserDetails(getAuth().currentUser?.displayName as string)
-  
-  const follow = async (e:React.FormEvent) => {
+
+  const follow = async (e: React.FormEvent) => {
     e.preventDefault()
-    if(!following){
-      sendNotification('followed', user.userID,userDetails.userID, `${userDetails.username} followed you.`)
+    if (!following) {
+      sendNotification('followed', user.userID, userDetails.userID, `${userDetails.username} followed you.`)
     }
     toggleFollowAUser(
       user,
@@ -24,33 +24,36 @@ export default function UserHint({user}:{user:currentUser}){
       following
     )
   }
-  useEffect(()=>{
-    if(userDetails){
-      if(userDetails.following.includes(user.userID))
-      setFollowing(true)
-      
+  useEffect(() => {
+    if (userDetails) {
+      if (userDetails.following.includes(user.userID))
+        setFollowing(true)
+
     }
-  },[userDetails])
+  }, [userDetails])
 
 
   return (
     <section className="userHint">
       <Link to={`profile/${user.username}`}>
-      <img src={user.avatarUrl!=''?user.avatarUrl:defaultAvatar} alt={user.username} />
+
+        <div className="userHintImg">
+          <Avatar id={user.userID} />
+        </div>
       </Link>
       <Link to={`/profile/${user.username}`}>
-      <div className="name">
-        <p className="fullname">
-          {user.fullName}
-        </p>
-        <p className="username">
-          @{user.username}
-        </p>
-      </div>
+        <div className="name">
+          <p className="fullname">
+            {user.fullName}
+          </p>
+          <p className="username">
+            @{user.username}
+          </p>
+        </div>
       </Link>
-      <button onClick={(e)=>follow(e)}
-      className='followButton'>
-        {following?'unfollow':'follow'}
+      <button onClick={(e) => follow(e)}
+        className='followButton'>
+        {following ? 'unfollow' : 'follow'}
       </button>
     </section>
   )
