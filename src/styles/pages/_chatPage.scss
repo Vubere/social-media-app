@@ -17,10 +17,13 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      justify-content: center;
       .receiverImage{
         margin-right: 5px;
         img{
           border-radius: 50%;
+          width: 30px;
+          height: 30px;
           border: 1px solid #3335;
         }
       }

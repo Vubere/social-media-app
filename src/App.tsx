@@ -22,11 +22,6 @@ function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if(currentUser!=null){
-      navigate('/home')
-    }else{
-      navigate('/login')
-    }
     onAuthStateChanged(auth, async (user) => {
       if (user != null) {
         localStorage.setItem('currentuser', JSON.stringify(user))

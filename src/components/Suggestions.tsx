@@ -10,20 +10,17 @@ import UserHint from './UserHint'
 
 export default function Suggestion() {
   const [suggestions, setSuggestions] = useState<currentUser[]>([])
-  const {currentUser} = getAuth()
-  const [user, setUser] = useState<currentUser|undefined>()
+  const {user} = useAppSelector(state=>state.user)
+  
   
   useEffect(()=>{
     (async ()=>{
-      if(currentUser!=null){
-        const userDetails = await getUserById(currentUser.uid)
-       
-        const s = await getSuggestions(userDetails)
+      if(user!=null){
+        const s = await getSuggestions(user)
         setSuggestions(s)
-        setUser(userDetails)
       }
     })()
-  }, [currentUser])
+  }, [user])
   
   return ( 
    user!=undefined?

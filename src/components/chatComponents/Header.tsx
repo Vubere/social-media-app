@@ -2,10 +2,13 @@ import { currentUser } from "../profileComponents/Header";
 import defaultAvatar from '../../assets/defaultAvatar.jpg'
 import backArrow from '../../assets/backArrow.svg'
 import Avatar from "../Avatar";
+import { useNavigate } from "react-router-dom";
 
 export default function ChatHeader({ receiver }: { receiver: currentUser }) {
+  const navigate = useNavigate()
+
   return (
-    <section className="header">
+    <header className="header">
       <section className="userDetails">
         <span className="receiverImage"> 
           <Avatar id={receiver.userID}/>
@@ -17,8 +20,10 @@ export default function ChatHeader({ receiver }: { receiver: currentUser }) {
         </span>
       </section>
       <span className="back">
-        <img src={backArrow} alt="" height="25px" width="40px"/>
+        
+        <img src={backArrow} alt="" height="25px" width="40px"
+        onClick={()=>navigate(-1)}/>
       </span>
-    </section>
+    </header>
   )
 }

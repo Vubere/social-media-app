@@ -5,41 +5,37 @@ import { db } from '../main'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import PostItem from './FeedComponents/PostItem'
 
-import { PostDetails } from './FeedComponents/PostItem'
 import { getUserById } from '../helpers/helpers'
 
 import Loading from './loading'
-import { setFeed } from '../slices/feedSlice'
+
 
 export default function Feed() {
-  const { currentUser } = getAuth()
+  const {user} = useAppSelector(state=>state.user)
   const [postsIds, setPostsIds] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (currentUser != null && postsIds.length == 0) {
+    if (user!=null&&postsIds.length==0) {
       (async () => {
-        const curUser = await getUserById(currentUser.uid)
-        let temp: any[] = [curUser.userID, ...curUser.following]
-        let arr: any[] = []
-      
+        let temp: any[] = [user.userID, ...user.following]
+        let arr: any[] = []   
         
         temp.forEach((v, i) => {
           (async()=>{ 
             const user = await getUserById(v)
             arr.push(...user.posts)
-            if(curUser.following.length-1==i){
+            if(temp.length-1==i){
               setPostsIds(arr)
             }
           })()
         })
         
-        
-      
         setLoading(false)  
       })()
     }
-  }, [currentUser])
+  }, [user])
+  
   return (<>
     {!loading?postsIds.length != 0 ?
       <section className='feed'>

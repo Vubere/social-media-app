@@ -24,8 +24,6 @@ export default function Header() {
   const [notificationsAmount, setNotificationsAmount] = useState<number>()
   const [messagesAmount, setMessagesAmount] = useState<number>()
 
-  const navigate = useNavigate()
-
   const auth = getAuth()
 
   const signout = async () => {
@@ -41,6 +39,8 @@ export default function Header() {
           let data: any = doc.data()
           if (data) {
             const { unreadNotification, unReadMessage } = data
+            setNotificationsAmount(unreadNotification)
+            setMessagesAmount(unReadMessage)
           }
         })
       })()

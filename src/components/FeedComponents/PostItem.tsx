@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 
 
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import {  getDoc, doc,onSnapshot } from "firebase/firestore";
 import { db } from "../../main";
 
 import Form from "./CommentForm";
@@ -27,7 +27,8 @@ export default function PostItem({ postId }: { postId: string }) {
   const commentRef = useRef<HTMLInputElement>()
 
   useEffect(() => {
-    /*   const unsubscribe = onSnapshot(docRef, (doc) => {
+    const docRef = doc(db, 'post', postId)
+    const unsubscribe = onSnapshot(docRef, (doc) => {
       if (doc.exists()) {
         const post = doc.data() as PostDetails
         (async () => {
@@ -38,8 +39,8 @@ export default function PostItem({ postId }: { postId: string }) {
         const comArr:comment[] = Object.values(post.comments)
         setComments(comArr)
       }
-    }) */
-    (async()=>{
+    })
+    /* (async()=>{
       const docRef = doc(db, 'post', postId)
       const docf = await getDoc(docRef)
       let h = docf.data()
@@ -51,7 +52,7 @@ export default function PostItem({ postId }: { postId: string }) {
       setPostDetails(post)
       const comArr: comment[] = Object.values(post.comments)
       setComments(comArr)
-    })()
+    })() */
   }, [postId])
 
 
