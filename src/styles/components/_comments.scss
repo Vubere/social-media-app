@@ -63,16 +63,33 @@
       width: 100%;
       display: flex;
       align-items: center;
+      height: 48px;
+
+      .imgHead{
+        margin: 5px;
+        img{
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+      }
       .details{
         font-size: 0.8em;
       }
     }
   }
   .reactions {
+    margin-top: 10px;
     width: 100%;
     display: flex;
     justify-content: space-around;
-    .like,
+    .like{
+      display: flex;
+      img{
+        width: 20px;
+        height: 20px;
+      }
+    }
     .comment {
       cursor: pointer;
       img {

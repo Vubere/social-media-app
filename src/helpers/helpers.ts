@@ -9,9 +9,10 @@ import {
   updateDoc,
   doc,
   onSnapshot,
+  increment,
 } from "firebase/firestore";
 import { db } from "../main";
-import { User, getAuth } from "firebase/auth";
+import {  getAuth } from "firebase/auth";
 import { where } from "firebase/firestore";
 
 import { currentUser } from "../components/profileComponents/Header";
@@ -115,6 +116,7 @@ export async function sendNotification(
     userRef,
     {
       notifications: arrayUnion(id),
+      unreadNotifications: increment(1)
     },
   );
 }

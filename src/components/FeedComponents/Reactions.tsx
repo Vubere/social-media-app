@@ -15,7 +15,7 @@ import comment from '../../assets/addComment.svg'
 export default function Reactions({details, id, commentRef}:{details:PostDetails, id:string, commentRef:any}){
   const [likeArr, setLikes] = useState(details.likes)
   const {currentUser} = getAuth()
-  const {date, comments} = details
+  const { comments} = details
 
   const handleLike = async () => {
     if (currentUser != null) {
@@ -41,18 +41,18 @@ export default function Reactions({details, id, commentRef}:{details:PostDetails
   return (
       <div className="reactions">
           <span className="like" >
+            <p>{likeArr.length > 0 ? likeArr.length : ''}</p>
 
             <img src={currentUser != undefined ? likeArr.includes(currentUser.uid) ? liked : noLike : noLike} alt="like"
               onClick={handleLike} />
 
-            <p>{likeArr.length > 0 ? likeArr.length : ''}</p>
           </span>
           <span className="comment"
           onClick={()=>commentRef.current.focus()}>
 
+            <p>{comments.length > 0 ? comments.length : ''}</p>
             <img src={comment} alt="comment" />
 
-            <p>{comments.length > 0 ? comments.length : ''}</p>
           </span>
         </div>
   )

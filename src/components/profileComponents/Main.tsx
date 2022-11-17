@@ -13,6 +13,6 @@ export default function Main() {
     <>
       <Header user={userInfo} />
       <Feed user={userInfo} />
-    </>:<>lost</>
+    </>:<>user not found</>
   )
-}
+} 

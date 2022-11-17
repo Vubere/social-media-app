@@ -1,27 +1,32 @@
 import { format } from 'date-fns'
 import { getAuth } from 'firebase/auth'
-import { doc, getDoc, onSnapshot } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import { useState, useEffect } from 'react'
-import { getUserById } from '../helpers/helpers'
 import { db } from '../main'
 import NotificationHint from '../components/NotificationsHint'
+import { useAppSelector } from '../app/hooks'
 
 
 export default function NotificationsList() {
   const [notificationsArr, setNotifications] = useState<any[]>()
-  const [unread, setUnread] = useState(0)
+  const {user} = useAppSelector(state=>state.user)
   const { currentUser } = getAuth()
 
   useEffect(() => {
     let unsub: any = () => { }
     (async () => {
-      if (currentUser != null) {
-        const {notifications} = await getUserById(currentUser.uid)
-        setNotifications(notifications)
+      if (user != null) {
+        setNotifications(user.notifications)
+        const docRef = doc(db, 'user', user.userID)
+        if(user.unreadNotifications>0){
+          updateDoc(docRef,{
+            unreadNotifications: 0
+          })
+        }
       }
     })()
     return unsub
-  }, [currentUser])
+  }, [user])
   return (
     <section className='notifications'>
       <header>
@@ -31,7 +36,7 @@ export default function NotificationsList() {
         notificationsArr != undefined ?
           <div className='list'>
             {notificationsArr.length > 0 ?
-              notificationsArr.sort((a, b) => b.time - a.time).map((id:string) =>
+              notificationsArr.map((id:string) =>
                <NotificationHint key={id} id={id}/>) :
               <p>you have no notification</p>
             }

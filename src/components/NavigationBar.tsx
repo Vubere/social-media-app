@@ -24,6 +24,8 @@ export default function Header() {
   const [notificationsAmount, setNotificationsAmount] = useState<number>()
   const [messagesAmount, setMessagesAmount] = useState<number>()
 
+  console.log(notificationsAmount, messagesAmount)
+
   const auth = getAuth()
 
   const signout = async () => {
@@ -38,8 +40,8 @@ export default function Header() {
         onSnapshot(docRef, (doc) => {
           let data: any = doc.data()
           if (data) {
-            const { unreadNotification, unReadMessage } = data
-            setNotificationsAmount(unreadNotification)
+            const { unreadNotifications, unReadMessage } = data
+            setNotificationsAmount(unreadNotifications)
             setMessagesAmount(unReadMessage)
           }
         })
@@ -58,12 +60,18 @@ export default function Header() {
                 <img src={home} alt="" className='' width='80%' />
               </Link>
             </h1>
-            <Link to={routes.notifications} title='notifications' className='Link'>
-              <span className='count'>{notificationsAmount}</span>
+            <Link to={routes.notifications} title='notifications' className='Link notifMess'>
+              <span className='count'
+              style={{
+                'display': `${Number(notificationsAmount)>0?'grid':'none'}`
+              }}>{notificationsAmount}</span>
               <img src={notification} alt="" className='' width='80%' />
             </Link>
-            <Link to={routes.messages} title='messages' className='Link'>
-              <span className='count'>{messagesAmount}</span>
+            <Link to={routes.messages} title='messages' className='Link notifMess'>
+              <span className='count'
+                style={{
+                  'display': `${Number(messagesAmount) > 0 ? 'grid' : 'none'}`
+                }}>{messagesAmount}</span>
               <img src={messageIcon} alt="" className='' width='80%' />
             </Link>
             <Link to={routes.settings} title='settings' className='Link'>
